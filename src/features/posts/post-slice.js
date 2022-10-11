@@ -6,14 +6,14 @@ const initialState = {
 	error: null,
 };
 
-export const fetchPosts = async () => {
+export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
 	const res = await fetch("https://jsonplaceholder.typicode.com/posts");
 	if (!res.ok) {
 		throw Error(`Error fetch ${res.errorMessage}`);
 	}
 
 	return res;
-};
+});
 
 const postsSlice = createSlice({
 	name: "posts",
