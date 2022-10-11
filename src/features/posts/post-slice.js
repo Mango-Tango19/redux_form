@@ -12,7 +12,7 @@ export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
 		throw Error(`Error fetch ${res.errorMessage}`);
 	}
 
-	return res;
+	return res.json();
 });
 
 const postsSlice = createSlice({
