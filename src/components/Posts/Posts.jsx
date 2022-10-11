@@ -1,6 +1,11 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { selectAllPosts } from "../../features/posts/post-slice";
+import {
+	selectAllPosts,
+	selectPostsStatus,
+	selectPostsError,
+	fetchPosts,
+} from "../../features/posts/post-slice";
 
 const Posts = () => {
 	const posts = useSelector(selectAllPosts);

@@ -1,9 +1,18 @@
-import { createSlice, nanoid } from "@reduxjs/toolkit";
+import { createSlice, nanoid, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
 	posts: [],
 	status: "idle",
 	error: null,
+};
+
+export const fetchPosts = async () => {
+	const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+	if (!res.ok) {
+		throw Error(`Error fetch ${res.errorMessage}`);
+	}
+
+	return res;
 };
 
 const postsSlice = createSlice({
@@ -25,9 +34,25 @@ const postsSlice = createSlice({
 			},
 		},
 	},
+	extraReducers: (builder) => {
+		builder
+			.addCase(fetchPosts.pending, (state, action) => {
+				state.status = "loading";
+			})
+			.addCase(fetchPosts.fulfilled, (state, action) => {
+				state.status = "success";
+				state.posts = action.payload;
+			})
+			.addCase(fetchPosts.rejected, (state, action) => {
+				state.status = "error";
+				state.error = action.error.message;
+			});
+	},
 });
 
 export const selectAllPosts = (state) => state.posts.posts;
+export const selectPostsStatus = (state) => state.posts.status;
+export const selectPostsError = (state) => state.posts.error;
 export const { postAdded } = postsSlice.actions;
 
 export default postsSlice.reducer;
